@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class ZJRateStarView;
 typedef NS_ENUM(NSUInteger, ZJRateStarStyle) {
     ZJRateStarStyleTotalOnly = 0,
     ZJRateStarStyleAllowHalf,//0.5
@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, ZJRateStarStyle) {
 
 @protocol ZJRateStarViewDelegate<NSObject>
 @optional
-- (void)zjRateStarViewDidTapScore:(CGFloat )currentScore;
+- (void)zjRateStarView:(ZJRateStarView *)rateStarView didTapScore:(CGFloat )currentScore;
 @end
 
 @interface ZJRateStarView : UIView
@@ -40,10 +40,10 @@ typedef NS_ENUM(NSUInteger, ZJRateStarStyle) {
 @property (nonatomic, strong) UIImage *normalImage;
 @property (nonatomic, strong) UIImage *selectedImage;
 
-//set to allow tap action
+//set to allow tap action , default YES
 @property (nonatomic, assign) BOOL allowRate;
 
-//set to enable animation
+//set to enable animation , default NO
 @property (nonatomic, assign) BOOL hasAnimation;
 
 //change score delegate

@@ -65,6 +65,7 @@
 }
 #pragma mark - Set Up UI
 - (void)defaultConfig {
+    _allowRate = YES;
     _totalStars = 5;
     _style = ZJRateStarStyleTotalOnly;
     _currentScores = 0;
@@ -155,12 +156,14 @@
         star.center = CGPointMake(_starSize.width / 2 + index * (_starSize.width + _paddingWidth), self.bounds.size.height / 2);
         star.bounds = CGRectMake(0, 0, _starSize.width, _starSize.height);
     }
+    
+    _progressView.frame = CGRectMake(0, (self.bounds.size.height - _starSize.height) / 2, [self progressWidth], _starSize.height);
+    
     for (UIImageView *star in _selectedStars) {
         NSInteger index = [_selectedStars indexOfObject:star];
-        star.center = CGPointMake(_starSize.width / 2 + index * (_starSize.width + _paddingWidth), self.bounds.size.height / 2);
+        star.center = CGPointMake(_starSize.width / 2 + index * (_starSize.width + _paddingWidth), _progressView.bounds.size.height / 2);
         star.bounds = CGRectMake(0, 0, _starSize.width, _starSize.height);
     }
-    _progressView.frame = CGRectMake(0, (self.bounds.size.height - _starSize.height) / 2, [self progressWidth], _starSize.height);
 }
 
 - (UIImage *)bundleImageWithName:(NSString *)name {
@@ -186,8 +189,8 @@
         return;
     }
     self.currentScores = [self translateScore:totalSores + more / _starSize.width];
-    if ([self.delegate respondsToSelector:@selector(zjRateStarViewDidTapScore:)]) {
-        [self.delegate zjRateStarViewDidTapScore:_currentScores];
+    if ([self.delegate respondsToSelector:@selector(zjRateStarView:didTapScore:)]) {
+        [self.delegate zjRateStarView:self didTapScore:_currentScores];
     }
 }
 #pragma mark - Setter
@@ -215,13 +218,17 @@
 }
 
 - (void)setStarSize:(CGSize)starSize {
-    _starSize = starSize;
-    [self setNeedsLayout];
+    if (!CGSizeEqualToSize(starSize, _starSize)) {
+        _starSize = starSize;
+        [self setNeedsLayout];
+    }
 }
 
 - (void)setPaddingWidth:(CGFloat)paddingWidth {
-    _paddingWidth = paddingWidth;
-    [self setNeedsLayout];
+    if (_paddingWidth != paddingWidth) {
+        _paddingWidth = paddingWidth;
+        [self setNeedsLayout];
+    }
 }
 
 - (void)setTotalStars:(NSInteger)totalStars {
