@@ -9,7 +9,9 @@
 #import "ViewController.h"
 #import "ZJRateStarView.h"
 
-@interface ViewController ()
+@interface ViewController ()<ZJRateStarViewDelegate>
+@property (weak, nonatomic) IBOutlet ZJRateStarView *rateStarView;
+@property (weak, nonatomic) IBOutlet UILabel *rateLabel;
 
 @end
 
@@ -18,8 +20,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _rateStarView.style = ZJRateStarStyleAllowFloat;
+    _rateStarView.currentScores = 4.6;
+    _rateStarView.allowRate = YES;
+    _rateStarView.delegate = self;
+    
     ZJRateStarView *rateView = [ZJRateStarView starView];
-    rateView.frame = CGRectMake(100, 100, 200, 40);
+    rateView.frame = CGRectMake(100, 100, 300, 40);
+    rateView.normalImage = [UIImage imageNamed:@"star_normal"];
+    rateView.selectedImage = [UIImage imageNamed:@"star_highlighted"];
+    rateView.starSize = CGSizeMake(40, 40);
+    rateView.paddingWidth = 5;
+    [self.view addSubview:rateView];
+}
+
+- (void)zjRateStarView:(ZJRateStarView *)rateStarView didTapScore:(CGFloat)currentScore {
+    _rateLabel.text = [NSString stringWithFormat:@"%.1f",currentScore];
 }
 
 
